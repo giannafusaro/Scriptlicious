@@ -3,24 +3,18 @@
 
 def anagram(word)
   initial = []
-  results = []
+  results = [word]
+
   if word.length>1
     initial << swap(word[0..1], 0, 1)
     initial << word[0..1]
+    puts "#{initial}"
 
     (2..(word.length-1)).each do |i|
-      # puts "///////////////////////////////////////////////////////////////"
-      # puts "anagram called i=#{i} and results: " + results.inspect
-      if i==2
-        results = next_permutation(initial, word[i])
-      else
-        results = next_permutation(results, word[i])
-      end
+      results = i==2 ? next_permutation(initial, word[i]) : next_permutation(results, word[i])
     end
-    results
-  else
-    word
   end
+  results
 end
 
 
@@ -28,57 +22,42 @@ def swap(word, index1, index2)
   swapped = ""
 
   unless word.length<2 || index1==index2
-    if index1==0
-      swapped += word[index2]
-    else
-      swapped += word.slice(0..(index1-1)) + word[index2]
-    end
-    swapped += word.slice((index1+1)..(index2-1)) + word[index1]
-    if index2==(word.length-1)
-      swapped
-    else
-      swapped += word.slice((index2+1)..(word.length-1))
-    end
-    swapped
+    swapped += index1==0 ? word[index2] : word[0..(index1-1)] + word[index2]
 
+    swapped += word.slice((index1+1)..(index2-1)) + word[index1]
+
+    swapped += index2==(word.length-1) ? "" : word.slice((index2+1)..(word.length-1))
   end
 
 end
 
 def next_permutation(previous, char)
   results = []
-  # puts "char " + char
-  # puts "next_permutation previous at start" + previous.inspect
+
   previous.each do |word|
     new_word = word + char
     results << new_word
     (0..(new_word.length-2)).each do |i|
+      puts "#{i}"
       results << swap(new_word, i, (new_word.length-1))
-      # puts "next_permutation i=#{i}, swap position #{i} with position #{new_word.length-1} in #{new_word}: " + results.inspect
-
+      puts "#{results}"
+      results
     end
   end
-  # puts "next_permutation results at end" + results.inspect
+  results
+  puts "///////////////////////////////////////////////////////////////////////////////////////"
   results
 end
 
 def factorial(number)
   temp = 0
-  if number==1
-    1
-  else
-    temp = number * factorial(number-1)
-    temp
-  end
+  number==1 ? 1 : temp = number * factorial(number-1)
 end
 
-# puts "kasc " + swap("cask", 0, 3)
-# puts "acsk " + swap("cask", 0, 1)
-# puts "caks " + swap("cask", 2, 3)
 
-output = anagram("angelo")
-my_num_anagrams = (output.length)
-correct_num_anagrams = factorial("angelo".length)
-puts "correct_num_anagrams: #{correct_num_anagrams}"
-puts "my_num_anagrams: #{my_num_anagrams}"
-puts output.inspect
+ARGV.each do |argument|
+  output = anagram(argument)
+  puts "#{output}"
+  puts "correct number of anagrams #{factorial(argument.length)}"
+  puts "number of anagrams returned by function #{output.length}"
+end

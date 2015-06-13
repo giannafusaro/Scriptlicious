@@ -2,14 +2,16 @@
 
 
 def anagram(word)
-  if word.length<1
+  if word.length>1
     results = [word[0..1], swap(word[0..1], 0, 1)]
-  
+
     (2..(word.length-1)).each do |i|
       results = next_permutation(results, word[i])
     end
+    results
+  else
+    word
   end
-  word
 end
 
 

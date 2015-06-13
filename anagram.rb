@@ -2,19 +2,14 @@
 
 
 def anagram(word)
-  initial = []
-  results = [word]
-
-  if word.length>1
-    initial << swap(word[0..1], 0, 1)
-    initial << word[0..1]
-    puts "#{initial}"
-
+  if word.length<1
+    results = [word[0..1], swap(word[0..1], 0, 1)]
+  
     (2..(word.length-1)).each do |i|
-      results = i==2 ? next_permutation(initial, word[i]) : next_permutation(results, word[i])
+      results = next_permutation(results, word[i])
     end
   end
-  results
+  word
 end
 
 
@@ -44,7 +39,6 @@ def next_permutation(previous, char)
       results
     end
   end
-  results
   puts "///////////////////////////////////////////////////////////////////////////////////////"
   results
 end
